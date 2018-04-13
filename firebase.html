@@ -4,40 +4,18 @@
     <meta charset="UTF-8">
     <title>Notewriter using quill js</title>
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/roolith-css/dist/css/roolith.min.css">
-    <style>
-        b { font-weight: bold; }
-        #editor { outline: none; }
-    </style>
 </head>
 <body>
     
     <div class="container">
         <br><br>
-        <p>Edit the text below</p>
-        <hr>
-        <div id="editor" contenteditable="true" onkeyup="updateData()"></div>
+
+        <textarea name="editor" id="editor" class="form-textarea" onkeyup="updateData()"></textarea>
     </div>
+    
 
     <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
     <script>
-        function placeCaretAtEnd(el) {
-            el.focus();
-            if (typeof window.getSelection != "undefined"
-                    && typeof document.createRange != "undefined") {
-                var range = document.createRange();
-                range.selectNodeContents(el);
-                range.collapse(false);
-                var sel = window.getSelection();
-                sel.removeAllRanges();
-                sel.addRange(range);
-            } else if (typeof document.body.createTextRange != "undefined") {
-                var textRange = document.body.createTextRange();
-                textRange.moveToElementText(el);
-                textRange.collapse(false);
-                textRange.select();
-            }
-        }
-
         let config = {
             apiKey: "AIzaSyAx5gkv8T0mHtc5dnyp5mL4kfMBpE1ku68",
             authDomain: "notewriter-28fd1.firebaseapp.com",
@@ -53,13 +31,11 @@
         const ref = database.ref('editor');
 
         ref.child('instanceOne').on('value', function(snapshot) {
-            document.getElementById('editor').innerHTML = snapshot.val();
-
-            placeCaretAtEnd(document.getElementById('editor'));
+            document.getElementById('editor').value = snapshot.val();
         });  
 
         function updateData() {
-            var x = document.getElementById("editor").innerHTML;
+            var x = document.getElementById("editor").value;
             
             ref.update({
                 instanceOne: x
