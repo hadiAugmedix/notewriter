@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Websocket</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/roolith-css/dist/css/roolith.min.css">
+
+    <style>
+        .chat { padding: 10px 0; font-size: 14px; line-height: 18px; }
+        .chat li { padding: 10px 20px; background-color: #f2f2f2; }
+        .chat li:nth-child(odd) { background-color: #f9f9f9; }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <div id="status" class="message">Connecting...</div>
+        
+        <hr>
+        <ul id="messages" class="chat"></ul>
+
+        <form id="message-form" action="#" method="post" class="form">
+            <div class="form-field">
+                <textarea id="message" placeholder="Write your message here..." required class="form-textarea"></textarea>
+            </div>
+            <button type="submit" class="button button-primary">Send Message</button>
+            <button type="button" id="close" class="button button-danger float-right">Close Connection</button>
+        </form>
+    </div>
+    
+    <script>
+        window.onload = function() {
+
+            const websocketServerUrl = 'ws://localhost:3001';
+
+            const form = document.getElementById('message-form');
+            const messageField = document.getElementById('message');
+            const messagesList = document.getElementById('messages');
+            const socketStatus = document.getElementById('status');
+            const closeBtn = document.getElementById('close');
+
+            let id = null;
+
+
+            let socket = new WebSocket(websocketServerUrl);
+
+            socket.onopen = function(event) {
+                socketStatus.innerHTML = `Connected to: ${event.currentTarget.url}`;
+                socketStatus.classList.add('message-success');
+            }
+
+            socket.onerror = function(error) {
+                socketStatus.innerHTML = `Unable to connect: ${event.currentTarget.url} make sure URL is correct!`;
+                socketStatus.classList.add('message-danger');
+            };
+
+            socket.onclose = function(event) {
+                socketStatus.innerHTML = 'Disconnected from WebSocket.';
+                socketStatus.className = 'message';
+            };
+
+            socket.onmessage = function(event) {
+                console.log(event);
+
+                let data = JSON.parse(event.data);
+                if(data.message === 'SET_ID') {
+                    id = data.id;
+                }
+                else {
+                    messagesList.innerHTML += `<li>${data.message}</li>`;
+                }
+            };
+
+
+            form.onsubmit = function(e) {
+                e.preventDefault();
+
+                let message = messageField.value;
+
+                socket.send(JSON.stringify({
+                    message: message,
+                    fromId: id
+                }));
+
+                messageField.value = '';
+            };
+
+
+            closeBtn.onclick = function(e) {
+                e.preventDefault();
+
+                socket.close();
+            };
+
+        };
+    </script>
+</body>
+</html>

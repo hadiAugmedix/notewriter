@@ -12,60 +12,9 @@
 <body>
     
     <div class="container">
-        <br><br>
-        <p>Edit the text below</p>
-        <hr>
-        <div id="editor" contenteditable="true" onkeyup="updateData()"></div>
+        
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
-    <script>
-        function placeCaretAtEnd(el) {
-            el.focus();
-            if (typeof window.getSelection != "undefined"
-                    && typeof document.createRange != "undefined") {
-                var range = document.createRange();
-                range.selectNodeContents(el);
-                range.collapse(false);
-                var sel = window.getSelection();
-                sel.removeAllRanges();
-                sel.addRange(range);
-            } else if (typeof document.body.createTextRange != "undefined") {
-                var textRange = document.body.createTextRange();
-                textRange.moveToElementText(el);
-                textRange.collapse(false);
-                textRange.select();
-            }
-        }
-
-        let config = {
-            apiKey: "AIzaSyAx5gkv8T0mHtc5dnyp5mL4kfMBpE1ku68",
-            authDomain: "notewriter-28fd1.firebaseapp.com",
-            databaseURL: "https://notewriter-28fd1.firebaseio.com",
-            projectId: "notewriter-28fd1",
-            storageBucket: "notewriter-28fd1.appspot.com",
-            messagingSenderId: "900567812534"
-        };
-        
-        firebase.initializeApp(config);
-
-        const database = firebase.database();       
-        const ref = database.ref('editor');
-
-        ref.child('instanceOne').on('value', function(snapshot) {
-            document.getElementById('editor').innerHTML = snapshot.val();
-
-            placeCaretAtEnd(document.getElementById('editor'));
-        });  
-
-        function updateData() {
-            var x = document.getElementById("editor").innerHTML;
-            
-            ref.update({
-                instanceOne: x
-            });
-        }
-    </script>
     <script src="./dist/bundle.js"></script>
 </body>
 </html>

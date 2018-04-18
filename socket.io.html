@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Websocket</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/roolith-css/dist/css/roolith.min.css">
+
+    <style>
+        .chat { padding: 10px 0; font-size: 14px; line-height: 18px; }
+        .chat li { padding: 10px 20px; background-color: #f2f2f2; }
+        .chat li:nth-child(odd) { background-color: #f9f9f9; }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <div id="status" class="message">Connecting...</div>
+        
+        <hr>
+        <ul id="messages" class="chat"></ul>
+
+        <form id="message-form" action="#" method="post" class="form">
+            <div class="form-field">
+                <textarea id="message" placeholder="Write your message here..." required class="form-textarea"></textarea>
+            </div>
+        </form>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
+    <script>
+        window.onload = function() {
+            const socketServerUrl = 'http://localhost:3000';
+
+            const socket = io(socketServerUrl);
+            const form = document.getElementById('message-form');
+            const messageField = document.getElementById('message');
+            const messagesList = document.getElementById('messages');
+            const socketStatus = document.getElementById('status');
+            const closeBtn = document.getElementById('close');
+
+            let id = Date.now();
+
+            socket.on('connect', () => {
+                socketStatus.innerHTML = `Connected with socket server ${socketServerUrl}`;
+                socketStatus.classList.add('message-success');
+            });
+
+            socket.on('connect_error', () => {
+                socketStatus.innerHTML = `Unable to connect socket server ${socketServerUrl}`;
+                socketStatus.classList.add('message-danger');
+            });
+
+            socket.on('serverBroadcast', (data) => {
+                console.log('receiving', data);
+
+                if(data.fromClient != id) {
+                    messageField.value = data.message;
+                }
+            });
+
+            messageField.onkeyup = () => {
+                let data = {
+                    message: messageField.value,
+                    fromClient: id
+                };
+
+                socket.emit('broadcast', data);
+
+                console.log('sending', data);
+            }
+
+            // test 
+            // let times = [2, 1, 0.5, 0.2, 0.7];
+            // for (var i = 0; i < times.length; i++) {
+            //     setTimeout(()=> {
+            //         messageField.value = messageField.value + Date.now() + ' ';
+
+            //         let data = {
+            //             message: messageField.value,
+            //             fromClient: id
+            //         };
+
+            //         socket.emit('broadcast', data);
+                    
+            //     }, times[i] * 1000);
+            // }
+
+        }
+    </script>
+</body>
+</html>
