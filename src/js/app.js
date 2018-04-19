@@ -1,3 +1,6 @@
-import Example from './Example';
+require('./../../index.html');
 
-new Example().init();
+import NoteWriter from './NoteWriter';
+
+const noteWriter = new NoteWriter();
+noteWriter.init();

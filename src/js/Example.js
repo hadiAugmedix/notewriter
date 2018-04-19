@@ -1,6 +1,6 @@
 class Example {
     init() {
-        console.log('From example classsss!');
+        console.log(Date.now());
     }
 }
 
