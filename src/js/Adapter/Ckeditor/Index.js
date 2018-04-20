@@ -13,8 +13,11 @@ class NoteWriterCkeditor {
             return false;
         }
 
+        // this.settings.config
         ClassicEditor
-            .create(document.querySelector(this.settings.element), this.settings.config)
+            .create(document.querySelector(this.settings.element), {
+                toolbar: [ 'bold', 'italic', 'bulletedList', 'numberedList', 'undo', 'redo' ]
+            })
             .then(editor => {
                 this.instance = editor;
 

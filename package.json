@@ -27,6 +27,7 @@
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "html-webpack-plugin": "^3.2.0",
     "node-sass": "^4.8.3",
+    "postcss-loader": "^2.1.4",
     "raw-loader": "^0.5.1",
     "sass-loader": "^6.0.7",
     "style-loader": "^0.20.3",
@@ -37,10 +38,12 @@
   "dependencies": {
     "@ckeditor/ckeditor5-basic-styles": "^1.0.0-beta.2",
     "@ckeditor/ckeditor5-build-classic": "^1.0.0-beta.3",
+    "@ckeditor/ckeditor5-dev-utils": "^8.0.0",
     "@ckeditor/ckeditor5-editor-classic": "^1.0.0-beta.2",
     "@ckeditor/ckeditor5-essentials": "^1.0.0-beta.2",
     "@ckeditor/ckeditor5-list": "^1.0.0-beta.2",
     "@ckeditor/ckeditor5-paragraph": "^1.0.0-beta.2",
+    "@ckeditor/ckeditor5-theme-lark": "^1.0.0-beta.2",
     "@ckeditor/ckeditor5-ui": "^1.0.0-beta.2"
   }
 }
